@@ -1,4 +1,5 @@
 import jsChessEngine from 'js-chess-engine';
+import { getEmptyBoard } from './utils';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] as const;
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
@@ -13,7 +14,7 @@ export type Move = {
     to: Position;
 }
 
-const AI_LEVEL: 0 | 1 | 2 | 3 | 4 = 4;
+const AI_LEVEL: 0 | 1 | 2 | 3 | 4 = 0;
 
 export class Chess {
     private game = new jsChessEngine.Game();
@@ -44,8 +45,7 @@ export class Chess {
     }
 
     static moveToMatrix = ({ from, to }: Move) => {
-        // Creates two dimensional array filled with 0
-        const board: (0 | 1)[][] = Array.from(Array(8), () => new Array(8).fill(0));
+        const board = getEmptyBoard();
 
         const numberIndexFrom = 7 - numbers.indexOf(from.slice(1) as NumberType);
         const letterIndexFrom = letters.indexOf(from.slice(0, 1) as LetterType);

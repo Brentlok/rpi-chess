@@ -7,10 +7,16 @@ export class ChessMatrix {
         flip: 'vertical'
     });
     
-    constructor() {}
+    constructor() {
+        this.init();
+    }
 
     print = async (matrix: (0 | 1)[][]) => {
         await this.matrix.reset(0);
         await this.matrix.set(0, matrix);
-    } 
+    }
+
+    init = async () => {
+        await this.matrix.reset(0);
+    }
 }
