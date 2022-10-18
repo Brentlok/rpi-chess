@@ -5,14 +5,12 @@ import { sleep } from './utils';
 const chess = new Chess();
 const matrix = new ChessMatrix();
 
-const TIME = 5000;
+const TIME = 500;
 
 const gameLoop = async () => {
-    chess.printGame();
     await sleep(TIME);
 
     const moveA = chess.aiMove();
-    chess.printGame();
     await matrix.print(Chess.moveToMatrix(moveA));
     
     

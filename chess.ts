@@ -1,6 +1,5 @@
 import jsChessEngine from 'js-chess-engine';
 import { getEmptyBoard } from './utils';
-import now from 'performance-now';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] as const;
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
@@ -23,9 +22,10 @@ export class Chess {
     constructor() {}
 
     aiMove = (): Move => {
-        const start = now();
+        const t0 = performance.now();
         this.game.aiMove(AI_LEVEL);
-        console.log((start - now()).toFixed(3));
+        const perf = ((performance.now() - t0) / 1000).toFixed(3); 
+        console.log('Time needed to calculate the moves', `${perf}s`);
         const [{ from, to }] = this.game.getHistory('reversed');
         return { from, to };
     }
@@ -40,11 +40,6 @@ export class Chess {
 
         console.log(moves);
         return false;
-    }
-
-    printGame = () => {
-        console.clear();
-        this.game.printToConsole();
     }
 
     static moveToMatrix = ({ from, to }: Move) => {
