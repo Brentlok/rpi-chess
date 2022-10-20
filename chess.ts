@@ -1,5 +1,7 @@
 import jsChessEngine from 'js-chess-engine';
 import { getEmptyBoard } from './utils';
+import now from 'performance-now';
+import { aiMove } from './engine';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] as const;
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
@@ -14,20 +16,23 @@ export type Move = {
     to: Position;
 }
 
-const AI_LEVEL: 0 | 1 | 2 | 3 | 4 = 3;
-
 export class Chess {
     private game = new jsChessEngine.Game();
 
     constructor() {}
 
-    aiMove = (): Move => {
-        const t0 = performance.now();
-        this.game.aiMove(AI_LEVEL);
-        const perf = ((performance.now() - t0) / 1000).toFixed(3); 
+    aiMove = async (): Promise<Move> => {
+        const start = now();
+
+        const move = await aiMove(this.game.exportFEN(), 15);
+
+        const perf = ((now() - start) / 1000).toFixed(3); 
         console.log('Time needed to calculate the moves', `${perf}s`);
-        const [{ from, to }] = this.game.getHistory('reversed');
-        return { from, to };
+
+        this.tryMove(move.from, move.to);
+        this.game.printToConsole();
+
+        return move;
     }
 
     tryMove = (start: Position, end: Position) => {
@@ -40,6 +45,11 @@ export class Chess {
 
         console.log(moves);
         return false;
+    }
+
+    printGame = () => {
+        console.clear();
+        this.game.printToConsole();
     }
 
     static moveToMatrix = ({ from, to }: Move) => {
@@ -57,11 +67,11 @@ export class Chess {
         return board;
     }
 
-    static isCorrectMove = (move: string): move is Position => {
-        if(move.length > 2) {
+    static isCorrectPosition = (position: string): position is Position => {
+        if(position.length > 2) {
             return false;
         }
 
-        return letters.includes(move[0] as LetterType) && numbers.includes(move[1] as NumberType);
+        return letters.includes(position[0] as LetterType) && numbers.includes(position[1] as NumberType);
     }
 }

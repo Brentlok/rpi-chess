@@ -3,6 +3,8 @@
   "dependencies": {
     "js-chess-engine": "^1.0.2",
     "max7219-display": "2.1.0",
+    "node-stockfish": "^0.1.2",
+    "performance-now": "^2.1.0",
     "ts-node": "10.9.1"
   },
   "scripts": {
