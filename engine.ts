@@ -1,12 +1,10 @@
 import { StockfishInstance } from "node-stockfish";
 import { Chess, Move } from "./chess";
 
-const engine = StockfishInstance.getInstance();
-
 export const aiMove = async (fen: string, maxDepth = 15) => new Promise<Move>(res => {
+    const engine = StockfishInstance.getInstance();
     engine.setBoardstateByFen(fen);
     engine.startAnalysing({ lines: 1 });
-    console.log('Looking for best possible move...');
 
     engine.onAnalysisData(data => {
         if(data.depth >= maxDepth) {
